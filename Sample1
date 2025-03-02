@@ -31,6 +31,15 @@ def main():
     # click on button
     buttonAppointment.click()
 
+    # log in
+    inputUsername = findElementByID("txt-username")
+    inputPassword = findElementByID("txt-password")
+    buttonLogin = findElementByID("btn-login")
+
+    inputUsername.send_keys("John Doe")
+    inputPassword.send_keys("ThisIsNotAPassword")
+    buttonLogin.click()
+
     #search_box.send_keys("Selenium WebDriver" + Keys.RETURN)
 
     # Wait for the results to load (you can also use WebDriverWait for more advanced waiting)
@@ -42,11 +51,11 @@ def main():
 def findElementByID(identifier):
     try:
         WebElement = driver.find_element(By.ID, identifier)
-        print ("Element found!")
+        print ("Element found: " + identifier)
         return WebElement
 
     except NoSuchElementException:
-        print ("Element not found.")
+        print ("Element not found:" + identifier)
 
 
 # Call the main function to run the program
