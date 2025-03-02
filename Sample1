@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import Select
 
 # Declare global variable
 driver = None
@@ -25,12 +26,29 @@ def main():
 
     print ("Webpage opened")
 
+    AssertTextonPage("CURA Healthcare Service")
+
     # Find an element by its ID and interact with it (example: search box)
     buttonAppointment =  findElementByID("btn-make-appointment")
 
     # click on button
     buttonAppointment.click()
 
+    # log into website
+    module_login()
+
+    # enter appointment details
+    module_make_appointment()
+
+    # 
+
+    # Wait for the results to load (you can also use WebDriverWait for more advanced waiting)
+    driver.implicitly_wait(100)
+
+    # Close the browser
+    driver.quit()
+
+def module_login():
     # log in
     inputUsername = findElementByID("txt-username")
     inputPassword = findElementByID("txt-password")
@@ -40,13 +58,31 @@ def main():
     inputPassword.send_keys("ThisIsNotAPassword")
     buttonLogin.click()
 
-    #search_box.send_keys("Selenium WebDriver" + Keys.RETURN)
+    print ("Logged into Website")
 
-    # Wait for the results to load (you can also use WebDriverWait for more advanced waiting)
     driver.implicitly_wait(100)
 
-    # Close the browser
-    driver.quit()
+    AssertTextonPage("Please login to make appointment.")
+
+def module_make_appointment():
+    dropdownFacility = findElementByName("facility")
+    textVisitDate = findElementByID("txt_visit_date")
+    buttonBook = findElementByID("btn-book-appointment")
+
+    # Create a Select object to interact with the drop-down
+    select = Select(dropdownFacility)
+    select.select_by_visible_text("Seoul CURA Healthcare Center")
+
+    # Enter Visit Date
+    textVisitDate.send_keys("03/10/2025")
+
+    # Click on Book Appointment
+    buttonBook.click()
+
+    # Validate
+    AssertTextonPage("Please be informed that your appointment has been booked as following")
+
+    driver.implicitly_wait(100)
 
 def findElementByID(identifier):
     try:
@@ -57,6 +93,21 @@ def findElementByID(identifier):
     except NoSuchElementException:
         print ("Element not found:" + identifier)
 
+def findElementByName(identifier):
+    try:
+        WebElement = driver.find_element(By.NAME, identifier)
+        print ("Element found: " + identifier)
+        return WebElement
+
+    except NoSuchElementException:
+        print ("Element not found:" + identifier)
+
+
+def AssertTextonPage (text2Find):
+    if(text2Find in driver.page_source):
+        print ("Text found on page." + text2Find)
+    else:
+        print ("Text not found on page: " + text2Find)
 
 # Call the main function to run the program
 if __name__ == "__main__":
