@@ -1,0 +1,54 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.common.exceptions import NoSuchElementException
+
+# Declare global variable
+driver = None
+
+def initialize_driver():
+    global driver
+
+    # Initialize the driver (e.g., ChromeDriver in this case)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+def main():
+    global driver
+
+    # Initialize the driver
+    initialize_driver()
+
+    # Open a webpage
+    driver.get("https://katalon-demo-cura.herokuapp.com/")
+
+    print ("Webpage opened")
+
+    # Find an element by its ID and interact with it (example: search box)
+    buttonAppointment =  findElementByID("btn-make-appointment")
+
+    # click on button
+    buttonAppointment.click()
+
+    #search_box.send_keys("Selenium WebDriver" + Keys.RETURN)
+
+    # Wait for the results to load (you can also use WebDriverWait for more advanced waiting)
+    driver.implicitly_wait(100)
+
+    # Close the browser
+    driver.quit()
+
+def findElementByID(identifier):
+    try:
+        WebElement = driver.find_element(By.ID, identifier)
+        print ("Element found!")
+        return WebElement
+
+    except NoSuchElementException:
+        print ("Element not found.")
+
+
+# Call the main function to run the program
+if __name__ == "__main__":
+    main()
