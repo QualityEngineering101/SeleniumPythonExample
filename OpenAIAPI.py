@@ -2,18 +2,22 @@ from openai import OpenAI
 from selenium.webdriver.common.by import By
 import json
 import os
-from dotenv import load_dotenv
 import re
 
 file_path = "object_repository.json"
 
 class OpenAIAPI:
     def __init__(self, driver):
-        self.api_key = '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'
+        #print("Checking environment variables...")
+        #print("All environment variables:", os.environ)
+        #print("OPENAI_API_KEY value:", os.environ.get('OPENAI_API_KEY'))
+        self.api_key = os.environ.get('OPENAI_API_KEY')
+        if not self.api_key:
+            raise ValueError("OPENAI_API_KEY environment variable is not set")
         self.model = "gpt-4o-mini"
         self.driver = driver
 
-    def get_page_objects_html(self: str) -> str:
+    def get_page_objects_html(self) -> str:
           # Find all input boxes and buttons
         elements = self.driver.find_elements(By.XPATH, "//input | //button")
         
@@ -29,9 +33,6 @@ class OpenAIAPI:
         return html_content
 
     def create_object_repository(self) -> str:
-        # Load environment variables
-        #load_dotenv()
-        
         # Get HTML content of all elements
         html_content = self.get_page_objects_html()
 

@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from selenium import webdriver
 
 class WebUI:
     def __init__(self, driver):
@@ -13,5 +14,18 @@ class WebUI:
 
     def click(self, element: WebElement):
         element.click()
+
+    def openBrowser(self):
+        # leave blank for now
+        pass
+    
+    def navigateToURL(self, url: str):
+        self.driver.get(url)
+
+    def closeBrowser(self):
+        self.driver.quit()
+        # TODO: add a confirmation dialog
+
+    
 
 #WebUI.setText(findTestObject('Object Repository/Page_CURA Healthcare Service/input_Username_username'), 'John Doe')
